@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>- Nidaamka Dawacadda</title>
+    <link rel="icon" href="IMAGES/download.png" type="image/png">
+    
+    <!-- CDN imports -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); background-attachment: fixed; min-height: 100vh; color: #333; }
+        .login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .login-box { background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); width: 100%; max-width: 400px; }
+        .login-box h2 { margin-bottom: 1.5rem; text-align: center; color: #667eea; }
+        .login-input { width: 100%; padding: 12px 15px; margin-bottom: 1rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; transition: all 0.3s; }
+        .login-input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .login-btn { width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
+        .login-btn:hover { transform: translateY(-2px); }
+        .navbar { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); padding: 1rem 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; display: none; }
+        .nav-brand { font-size: 1.4rem; font-weight: bold; color: #667eea; }
+        .nav-menu { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        .nav-btn { padding: 8px 16px; border: none; background: #f0f0f0; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-size: 14px; }
+        .nav-btn:hover { background: #667eea; color: white; }
+        .nav-btn.active { background: #667eea; color: white; }
+        .nav-right { margin-left: auto; display: flex; gap: 1rem; align-items: center; }
+        .user-info { font-weight: 500; color: #667eea; }
+        .unified-section { min-height: 100vh; padding: 2rem 1.5rem; display: none; }
+        .unified-section.active { display: block; animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .stat { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .stat:hover { transform: translateY(-5px); }
+        .stat small { font-size: 0.85rem; color: #6c757d; }
+        .stat div { font-size: 1.8rem; font-weight: bold; color: #667eea; margin-top: 0.5rem; }
+        .card-modern { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+        .table { width: 100%; border-collapse: collapse; }
+        .table th { background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #e0e0e0; }
+        .table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+        .btn-accent { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+        .btn-accent:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .btn-danger { background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+        .btn-sm { padding: 4px 8px; font-size: 0.85rem; }
+        .form-control { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .form-select { padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 1rem; }
+        .mt-3 { margin-top: 1rem; }
+        .mb-3 { margin-bottom: 1rem; }
+        .mb-4 { margin-bottom: 1.5rem; }
+        .mt-4 { margin-top: 1.5rem; }
+        .d-flex { display: flex; }
+        .d-none { display: none !important; }
+        .d-block { display: block !important; }
+        .w-100 { width: 100%; }
+        .w-auto { width: auto; }
+        .ms-auto { margin-left: auto; }
+        .flex-wrap { flex-wrap: wrap; }
+        .text-center { text-align: center; }
+        .text-muted { color: #6c757d; }
+        .text-success { color: #28a745; }
+        .text-warning { color: #ffc107; }
+        .text-danger { color: #dc3545; }
+        .table-warning { background-color: #fff3cd; }
+        .alert { padding: 12px; border-radius: 6px; margin-bottom: 1rem; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-danger { background: #f8d7da; color: #721c24; border: 1px solid #dc3545; }
+        .list-group { list-style: none; padding: 0; }
+        .list-group-item { padding: 12px; border: 1px solid #e0e0e0; border-bottom: none; background: white; }
+        .list-group-item:last-child { border-bottom: 1px solid #e0e0e0; border-radius: 0 0 6px 6px; }
+        .list-group-item:first-child { border-radius: 6px 6px 0 0; }
+        .badge { padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
+        .bg-primary { background: #667eea; color: white; }
+        .bg-danger { background: #dc3545; color: white; }
+        .bg-warning { background: #ffc107; color: #000; }
+        .bg-success { background: #28a745; color: white; }
+        .rounded-pill { border-radius: 50rem; }
+        .justify-content-between { justify-content: space-between; }
+        .align-items-center { align-items: center; }
+        .expired { background-color: #f8d7da !important; }
+        .expiring-soon { background-color: #fff3cd !important; }
+        #chartSales { max-width: 100%; height: 300px !important; }
+        #chartSales canvas { max-height: 100% !important; }
+        .role-admin { display: none; }
+        .role-cashier { display: none; }
+        .show-admin { display: block !important; }
+        .show-cashier { display: block !important; }
+        @media (max-width: 768px) {
+            .unified-section { padding: 1rem 0.75rem; }
+            .nav-menu { flex-direction: column; width: 100%; margin-top: 1rem; }
+            .nav-btn { width: 100%; }
+            .nav-right { margin-left: 0; margin-top: 1rem; width: 100%; }
+            .login-box { padding: 1.5rem; }
+            #chartSales { height: 250px !important; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Login View -->
+<div id="loginContainer" class="login-container">
+    <div class="login-box">
+       <img src="IMAGES/download.png"
+     width="100"
+     height="100"
+     style="display:block; margin:auto;">
+        <h2>🔐 BAXNAANO PHARMACY Login</h2>
+        <input type="text" id="loginUsername" class="login-input" placeholder="Username" maxlength="50" autocomplete="username">
+        <input type="password" id="loginPassword" class="login-input" placeholder="Password" autocomplete="current-password">
+        <button id="loginBtn" class="login-btn">Login</button>
+        <div id="loginAlert" class="alert alert-danger d-none mt-3"></div>
+        <!-- REMOVED: Default credentials display for security -->
+    </div>
+</div>
+
+<!-- Navigation -->
+<div id="navbar" class="navbar">
+     <img src="IMAGES/474461744_3830353873849045_6351787505269396883_n.jpg" style="width:9%; height:auto;">
+    <div class="nav-brand">💊PHARMACY POS</div>
+    <div class="nav-menu" id="navMenu"></div>
+    <div class="nav-right">
+        <span class="user-info" id="userDisplay"></span>
+        <button class="btn-accent" id="logoutBtn">Logout</button>
+        <button class="btn-accent role-admin" id="exportBtn"view data-="DOMContentLoaded" style="display:none">📥 Export Data</button>
+    </div>
+</div>
+
+<!-- Dashboard View (ADMIN ONLY) -->
+<div id="dashboardView" class="unified-section">
+    <h6 class="mb-3"><i class="bi bi-speedometer2"></i> Dashboard Overview - Admin Only</h6>
+    <div id="expiredMedicineAlert" class="alert alert-danger d-none">
+        <strong>⚠️ EXPIRED MEDICINES FOUND!</strong> Some medicines have expired. Check the Stock & Expiry Alerts section below.
+    </div>
+    <div class="row g-3 mb-4" style="display: flex; gap: 1rem;">
+        <div class="col-md-3" style="flex: 1;"><div class="stat"><small class="text-muted">Today Sales</small><div id="statToday">$0.00</div></div></div>
+        <div class="col-md-3" style="flex: 1;"><div class="stat"><small class="text-muted">This Week</small><div id="statWeek">$0.00</div></div></div>
+        <div class="col-md-3" style="flex: 1;"><div class="stat"><small class="text-muted">This Month</small><div id="statMonth">$0.00</div></div></div>
+        <div class="col-md-3" style="flex: 1;"><div class="stat"><small class="text-muted">Total Medicines</small><div id="statMedicines">0</div></div></div>
+    </div>
+    <div class="row g-3 mb-4" style="display: flex; gap: 1rem;">
+        <div class="col-md-3" style="flex: 1;"><div class="stat"><small class="text-muted">Total Profit</small><div id="statProfit">$0.00</div></div></div>
+        <div class="col-md-3" style="flex: 1;"><div class="stat"><small class="text-muted">Total Products</small><div id="statProducts">0</div></div></div>
+        <div class="col-md-3" style="flex: 1;"><div class="stat"><small class="text-muted">Low Stock Items</small><div id="statLowStock">0</div></div></div>
+        <div class="col-md-3" style="flex: 1;"><div class="stat"><small class="text-muted">Credit Amount</small><div id="statCredit">$0.00</div></div></div>
+    </div>
+    <div class="row g-3" style="display: flex; gap: 1rem;">
+        <div class="col-md-8" style="flex: 2;"><div class="card-modern"><h6>📈 Sales Chart (Last 14 Days)</h6><canvas id="chartSales"></canvas></div></div>
+        <div class="col-md-4" style="flex: 1;"><div class="card-modern"><h6>🏆 Top Sold Items</h6><div id="topSoldList"></div></div></div>
+    </div>
+    <div class="card-modern mt-3"><h6>⚠️ Stock & Expiry Alerts</h6><div id="lowStockAlerts"></div></div>
+</div>
+
+<!-- POS View -->
+<div id="sellView" class="unified-section">
+    <h6 class="mb-3"><i class="bi bi-receipt"></i> Point of Sale</h6>
+    <div class="row g-3" style="display: flex; gap: 1rem;">
+        <div class="col-md-6" style="flex: 1;">
+            <input id="searchProduct" class="form-control mb-3" placeholder="🔍 Search product by name...">
+            <div id="productList" style="max-height:420px;overflow:auto"></div>
+        </div>
+        <div class="col-md-6" style="flex: 1;">
+            <h6>🛒 Shopping Cart</h6>
+            <div id="cartArea"></div>
+            <div class="d-flex gap-2 mt-3 flex-wrap" style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                <select id="payType" class="form-select w-auto">
+                    <option value="Paid">💵 Paid</option>
+                    <option value="Credit">💳 Credit</option>
+                </select>
+                <input id="custName" class="form-control" placeholder="Customer Name (Credit)" style="display:none" autocomplete="off">
+                <input id="custPhone" class="form-control" placeholder="Phone (Credit)" style="display:none" autocomplete="off">
+                <button class="btn-accent ms-auto" id="btnSaveSale">🖨️ Save & Print Receipt</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Products View (ADMIN ONLY) -->
+<div id="productsView" class="unified-section">
+    <h6 class="mb-3 role-admin" style="display:none"><i class="bi bi-pills"></i> Manage Products</h6>
+    <form id="productForm" class="row g-2 mb-3 role-admin" style="display:none">
+        <input type="hidden" id="editProductId">
+        <div class="col-md-3"><input id="pName" class="form-control" placeholder="Medicine Name" required maxlength="100"></div>
+        <div class="col-md-2"><input id="pPrice" class="form-control" type="number" min="0.01" step="0.01" placeholder="Sale Price $" required></div>
+        <div class="col-md-2"><input id="pCost" class="form-control" type="number" min="0.01" step="0.01" placeholder="Cost Price $" required></div>
+        <div class="col-md-1"><input id="pQty" class="form-control" type="number" min="0" placeholder="Qty" required></div>
+        <div class="col-md-1"><input id="pLow" class="form-control" type="number" min="0" placeholder="Low Alert" value="5" required></div>
+        <div class="col-md-2"><input id="pExpiry" class="form-control" type="date" required></div>
+        <div class="col-md-1"><button class="btn-accent w-100" type="submit">Save</button></div>
+    </form>
+    <input id="filterProd" class="form-control mb-3" placeholder="🔍 Filter products...">
+    <div style="max-height:360px;overflow:auto">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Cost</th>
+                    <th>Qty</th>
+                    <th>Low</th>
+                    <th>Expiry</th>
+                    <th>Status</th>
+                    <th class="role-admin" style="display:none">Action</th>
+                </tr>
+            </thead>
+            <tbody id="productsTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Reports View -->
+<div id="reportsView" class="unified-section">
+    <h6 class="mb-3"><i class="bi bi-graph-up"></i> Sales Reports</h6>
+    <div class="row g-3" style="display: flex; gap: 1rem;">
+        <div class="col-md-6" style="flex: 1;">
+            <div class="d-flex gap-2 align-items-center mb-3 flex-wrap">
+                <label>📅 Range:</label>
+                <select id="reportRange" class="form-select w-auto">
+                    <option value="today">Today</option>
+                    <option value="week">Week</option>
+                    <option value="month">Month</option>
+                    <option value="all">All</option>
+                    <option value="custom">Custom</option>
+                </select>
+                <input type="date" id="rFrom" style="display:none">
+                <input type="date" id="rTo" style="display:none">
+            </div>
+            <h4 id="repTotal">$0.00</h4>
+            <div class="text-muted mb-3">Total sales in selected range</div>
+            <h6>📦 Items Sold Breakdown</h6>
+            <div id="repItems" style="max-height:260px;overflow:auto"></div>
+        </div>
+        <div class="col-md-6" style="flex: 1;">
+            <h6>🛒 Recent Sales</h6>
+            <div style="max-height:360px;overflow:auto">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Type</th>
+                            <th>User</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentSalesTbl"></tbody>
+                </table>
+            </div>
+            <hr>
+            <h6>💳 Credit Accounts</h6>
+            <div id="creditList" style="max-height:200px;overflow:auto"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Returns View (ADMIN ONLY) -->
+<div id="returnsView" class="unified-section">
+    <h6 class="mb-3 role-admin" style="display:none"><i class="bi bi-arrow-return-left"></i> Process Returns (Admin)</h6>
+    <div class="card-modern role-admin" style="display:none">
+        <div class="d-flex gap-2 mb-3">
+            <input id="returnOrderId" class="form-control" placeholder="Enter Order ID (e.g., INV_...)">
+            <button class="btn-accent" id="processReturnBtn">Process Return</button>
+        </div>
+        <div id="returnResult"></div>
+        <h6 class="mt-4 role-admin" style="display:none">📜 Returns History</h6>
+        <div id="returnsList" style="max-height:300px;overflow:auto"></div>
+    </div>
+</div>
+
+<!-- Users View (ADMIN ONLY) -->
+<div id="usersView" class="unified-section">
+    <h6 class="mb-3 role-admin" style="display:none"><i class="bi bi-people"></i> Manage Users</h6>
+    <form id="userForm" class="row g-2 mb-3 role-admin" style="display:none">
+        <div class="col-md-4"><input id="uName" class="form-control" placeholder="Username" required maxlength="50"></div>
+        <div class="col-md-4"><input id="uPass" class="form-control" placeholder="Password" required minlength="4"></div>
+        <div class="col-md-4">
+            <select id="uRole" class="form-select">
+                <option value="cashier">Cashier</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        <div class="col-12"><button class="btn-accent" type="submit">➕ Add User</button></div>
+    </form>
+    <div style="max-height:360px;overflow:auto" class="role-admin">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="usersTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Credit View -->
+<div id="creditView" class="unified-section">
+    <h6 class="mb-3"><i class="bi bi-credit-card"></i> Credit Payments</h6>
+    <div class="row g-3" style="display: flex; gap: 1rem;">
+        <div class="col-md-6" style="flex: 1;">
+            <div class="card-modern">
+                <h6>💰 Record Payment</h6>
+                <form id="creditPaymentForm">
+                    <div class="mb-3"><input id="searchCustomer" class="form-control" placeholder="🔍 Search customer by name or phone..." required></div>
+                    <div class="mb-3"><input id="paymentAmount" class="form-control" type="number" min="0.01" step="0.01" placeholder="Payment Amount $" required></div>
+                    <div class="mb-3"><input id="paymentNote" class="form-control" placeholder="Note (optional)"></div>
+                    <button class="btn-accent w-100" type="submit">💳 Record Payment</button>
+                </form>
+            </div>
+            <div id="paymentResult" class="mt-3"></div>
+        </div>
+        <div class="col-md-6" style="flex: 1;">
+            <h6>👥 Customer Credit Accounts</h6>
+            <div id="creditAccountsList" style="max-height:400px;overflow:auto"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================================================
+// PHARMACY POS SYSTEM - FINAL SECURE VERSION
+// ============================================================================
+'use strict';
+
+// ==================== CONFIGURATION ====================
+const CONFIG = {
+    STORAGE_KEYS: {
+        USERS: 'pharma_users_final_v1',
+        SALES: 'pharma_sales_final_v1',
+        PRODUCTS: 'pharma_products_final_v1',
+        PATIENTS: 'pharma_patients_final_v1',
+        RETURNS: 'pharma_returns_final_v1',
+        PAYMENTS: 'pharma_payments_final_v1',
+        AUDIT: 'pharma_audit_final_v1',
+        SESSION: 'pharma_session_final_v1'
+    },
+    ROLES: { ADMIN: 'admin', CASHIER: 'cashier' }
+};
+
+// Global state
+let currentUser = null;
+let cart = [];
+let salesChart = null;
+
+// ==================== SECURITY ====================
+function sanitizeInput(text, maxLength = 500) {
+    if (typeof text !== 'string') return '';
+    return text
+        .replace(/[<>\"'&]/g, char => ({'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;','&':'&amp;'}[char]))
+        .substring(0, maxLength)
+        .trim();
+}
+
+async function hashPassword(password) {
+    try {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password + 'pharma_salt_secure_2024');
+        const hash = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch {
+        return btoa(password.split('').reverse().join(''));
+    }
+}
+
+// ==================== STORAGE ====================
+function loadData(key, defaultValue = []) {
+    try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : defaultValue;
+    } catch {
+        return defaultValue;
+    }
+}
+
+function saveData(key, data) {
+    try {
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
+    } catch (e) {
+        console.error('Save error:', e);
+        Swal.fire({icon: 'error', title: 'Storage Error', text: e.message});
+        return false;
+    }
+}
+
+// ==================== DATE HELPERS ====================
+function isExpired(expiryDate) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return new Date(expiryDate) < today;
+}
+
+function isExpiringSoon(expiryDate, days = 30) {
+    const today = new Date();
+    const soon = new Date(today.getTime() + days * 24 * 60 * 60 * 1000);
+    const exp = new Date(expiryDate);
+    return exp >= today && exp <= soon;
+}
+
+function generateId(prefix) {
+    return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
+function formatMoney(amount) {
+    return '$' + (parseFloat(amount) || 0).toFixed(2);
+}
+
+// ==================== AUTHENTICATION ====================
+async function checkSession() {
+    const session = localStorage.getItem(CONFIG.STORAGE_KEYS.SESSION);
+    if (session) {
+        const users = loadData(CONFIG.STORAGE_KEYS.USERS);
+        currentUser = users.find(u => u.username === session);
+        if (currentUser) {
+            showMainApp();
+            return;
+        }
+    }
+    showLogin();
+}
+
+function showLogin() {
+    document.getElementById('loginContainer').style.display = 'flex';
+    document.getElementById('navbar').style.display = 'none';
+}
+
+function showMainApp() {
+    document.getElementById('loginContainer').style.display = 'none';
+    document.getElementById('navbar').style.display = 'flex';
+    document.getElementById('userDisplay').textContent = `👤 ${currentUser.username} (${currentUser.role})`;
+    setupNavigation();
+    
+    // Apply role-based visibility
+    document.querySelectorAll('.role-admin').forEach(el => {
+        el.style.display = currentUser.role === CONFIG.ROLES.ADMIN ? 'block' : 'none';
+    });
+    
+    // Show appropriate view based on role
+    if (currentUser.role === CONFIG.ROLES.CASHIER) {
+        // Cashier goes directly to POS
+        showView('sell');
+    } else {
+        // Admin goes to dashboard
+        showView('dashboard');
+    }
+}
+
+async function handleLogin() {
+    const username = sanitizeInput(document.getElementById('loginUsername').value, 50);
+    const password = document.getElementById('loginPassword').value;
+    
+    if (!username || !password) {
+        Swal.fire({icon: 'warning', title: 'Enter credentials', timer: 1500});
+        return;
+    }
+    
+    const users = loadData(CONFIG.STORAGE_KEYS.USERS);
+    const user = users.find(u => u.username === username);
+    
+    if (!user) {
+        Swal.fire({icon: 'error', title: 'Invalid credentials', timer: 1500});
+        return;
+    }
+    
+    const hash = await hashPassword(password);
+    if (user.password === hash) {
+        currentUser = user;
+        localStorage.setItem(CONFIG.STORAGE_KEYS.SESSION, username);
+        showMainApp();
+        Swal.fire({icon: 'success', title: 'Login successful', timer: 1500});
+    } else {
+        Swal.fire({icon: 'error', title: 'Invalid credentials', timer: 1500});
+    }
+}
+
+// ==================== NAVIGATION ====================
+function setupNavigation() {
+    const navMenu = document.getElementById('navMenu');
+    navMenu.innerHTML = '';
+    
+    // Define navigation items per role
+    const navItems = {
+        admin: [
+            {view: 'dashboard', label: 'Dashboard'},
+            {view: 'sell', label: 'POS'},
+            {view: 'products', label: 'Products'},
+            {view: 'reports', label: 'Reports'},
+            {view: 'returns', label: 'Returns'},
+            {view: 'users', label: 'Users'},
+            {view: 'credit', label: 'Credit'}
+        ],
+        cashier: [
+            {view: 'sell', label: 'POS'},
+            {view: 'reports', label: 'Reports'},
+           
+        ]
+    };
+    
+    const items = navItems[currentUser.role] || navItems.cashier;
+    
+    items.forEach(item => {
+        const btn = document.createElement('button');
+        btn.className = 'nav-btn';
+        btn.dataset.view = item.view;
+        btn.textContent = item.label;
+        btn.onclick = () => showView(item.view);
+        navMenu.appendChild(btn);
+    });
+    
+    // Set first button as active
+    if (navMenu.firstChild) {
+        navMenu.firstChild.classList.add('active');
+    }
+}
+
+function showView(viewName) {
+    // Hide all sections
+    document.querySelectorAll('.unified-section').forEach(el => el.classList.remove('active'));
+    
+    // Remove active from all nav buttons
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    
+    // Show target section
+    const target = document.getElementById(viewName + 'View');
+    const navBtn = document.querySelector(`[data-view="${viewName}"]`);
+    
+    if (target) target.classList.add('active');
+    if (navBtn) navBtn.classList.add('active');
+    
+    // Role-based content visibility
+    document.querySelectorAll('.role-admin').forEach(el => {
+        el.style.display = currentUser.role === CONFIG.ROLES.ADMIN ? 'block' : 'none';
+    });
+    
+    // Render specific views
+    if (viewName === 'dashboard') renderDashboard();
+    if (viewName === 'sell') renderPOS();
+    if (viewName === 'products') renderProducts();
+    if (viewName === 'reports') renderReports();
+    if (viewName === 'returns') renderReturnsHistory();
+    if (viewName === 'users') renderUsers();
+    if (viewName === 'credit') renderCreditView();
+}
+
+// ==================== DASHBOARD (ADMIN ONLY) ====================
+function renderDashboard() {
+    // Only admin should see this
+    if (currentUser.role !== CONFIG.ROLES.ADMIN) {
+        showView('sell');
+        return;
+    }
+    
+    const sales = loadData(CONFIG.STORAGE_KEYS.SALES).filter(s => !s.returned);
+    const products = loadData(CONFIG.STORAGE_KEYS.PRODUCTS);
+    const patients = loadData(CONFIG.STORAGE_KEYS.PATIENTS);
+    
+    const today = new Date(); today.setHours(0,0,0,0);
+    const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+    
+    const todaySales = sales.filter(s => new Date(s.date) >= today).reduce((a,b) => a + b.total, 0);
+    const weekSales = sales.filter(s => new Date(s.date) >= weekAgo).reduce((a,b) => a + b.total, 0);
+    const monthSales = sales.filter(s => new Date(s.date) >= monthStart).reduce((a,b) => a + b.total, 0);
+    
+    const profit = sales.reduce((total, sale) => {
+        return total + sale.lines.reduce((lineProfit, line) => {
+            const prod = products.find(p => p.id === line.id);
+            if (!prod) return lineProfit;
+            return lineProfit + ((line.price - prod.cost) * line.qty);
+        }, 0);
+    }, 0);
+    
+    const totalMedicines = products.reduce((sum, p) => sum + p.qty, 0);
+    const totalProducts = products.length;
+    const lowStockItems = products.filter(p => p.qty <= p.low).length;
+    const expiredProducts = products.filter(p => isExpired(p.expiry));
+    const totalCredit = patients.reduce((sum, p) => sum + p.balance, 0);
+    
+    document.getElementById('statToday').textContent = formatMoney(todaySales);
+    document.getElementById('statWeek').textContent = formatMoney(weekSales);
+    document.getElementById('statMonth').textContent = formatMoney(monthSales);
+    document.getElementById('statMedicines').textContent = totalMedicines.toLocaleString();
+    document.getElementById('statProfit').textContent = formatMoney(profit);
+    document.getElementById('statProducts').textContent = totalProducts.toLocaleString();
+    document.getElementById('statLowStock').textContent = lowStockItems.toLocaleString();
+    document.getElementById('statCredit').textContent = formatMoney(totalCredit);
+    
+    // Expired medicine alert
+    const expiredAlert = document.getElementById('expiredMedicineAlert');
+    expiredAlert.classList.toggle('d-none', expiredProducts.length === 0);
+    
+    renderSalesChart();
+    renderTopSold();
+    renderAlerts();
+}
+
+function renderSalesChart() {
+    const canvas = document.getElementById('chartSales');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (salesChart) {
+        salesChart.destroy();
+        salesChart = null;
+    }
+    
+    const sales = loadData(CONFIG.STORAGE_KEYS.SALES).filter(s => !s.returned);
+    const last14Days = Array.from({length: 14}, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (13 - i));
+        d.setHours(0,0,0,0);
+        return d;
+    });
+    
+    const data = last14Days.map(date => {
+        return sales.filter(s => new Date(s.date).toDateString() === date.toDateString())
+                    .reduce((a,b) => a + b.total, 0);
+    });
+    
+    const labels = last14Days.map(d => d.toLocaleDateString('en-US', {month: 'short', day: 'numeric'}));
+    
+    salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                borderColor: '#667eea',
+                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                pointRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { 
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (context) => 'Sales: ' + formatMoney(context.parsed.y)
+                    }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, ticks: { callback: v => '$' + v } }
+            }
+        }
+    });
+}
+
+function renderTopSold() {
+    const sales = loadData(CONFIG.STORAGE_KEYS.SALES).filter(s => !s.returned);
+    const items = {};
+    sales.forEach(sale => sale.lines.forEach(l => items[l.name] = (items[l.name] || 0) + l.qty));
+    
+    const sorted = Object.entries(items).sort((a,b) => b[1] - a[1]).slice(0, 10);
+    const list = document.getElementById('topSoldList');
+    list.innerHTML = '';
+    
+    if (sorted.length === 0) {
+        list.innerHTML = '<p class="text-muted">No sales data yet.</p>';
+        return;
+    }
+    
+    const ul = document.createElement('ul');
+    ul.className = 'list-group';
+    sorted.forEach(([name, qty]) => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between';
+        li.innerHTML = `${sanitizeInput(name)}<span class="badge bg-primary rounded-pill">${qty}</span>`;
+        ul.appendChild(li);
+    });
+    list.appendChild(ul);
+}
+
+function renderAlerts() {
+    const products = loadData(CONFIG.STORAGE_KEYS.PRODUCTS);
+    const alerts = document.getElementById('lowStockAlerts');
+    alerts.innerHTML = '';
+    
+    const frag = document.createDocumentFragment();
+    
+    // Expired
+    products.filter(p => isExpired(p.expiry)).forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'alert alert-danger';
+        div.innerHTML = `<strong>❌ EXPIRED:</strong> ${sanitizeInput(p.name)} (Expired: ${new Date(p.expiry).toLocaleDateString()})`;
+        frag.appendChild(div);
+    });
+    
+    // Expiring soon
+    products.filter(p => isExpiringSoon(p.expiry)).forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'alert alert-warning';
+        div.innerHTML = `<strong>⚠️ Expiring Soon:</strong> ${sanitizeInput(p.name)} (Expiry: ${new Date(p.expiry).toLocaleDateString()})`;
+        frag.appendChild(div);
+    });
+    
+    // Low stock
+    products.filter(p => p.qty <= p.low).forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'alert alert-warning';
+        div.innerHTML = `<strong>Low Stock:</strong> ${sanitizeInput(p.name)} (Qty: ${p.qty})`;
+        frag.appendChild(div);
+    });
+    
+    if (frag.childNodes.length === 0) {
+        alerts.innerHTML = '<p class="text-muted">✅ No alerts.</p>';
+    } else {
+        alerts.appendChild(frag);
+    }
+}
+
+// ==================== POS (CASHIER & ADMIN) ====================
+function renderPOS() {
+    document.getElementById('searchProduct').value = '';
+    document.getElementById('cartArea').innerHTML = '<p class="text-muted"><i class="bi bi-cart"></i> Cart is empty</p>';
+    document.getElementById('payType').value = 'Paid';
+    document.getElementById('custName').value = '';
+    document.getElementById('custPhone').value = '';
+    document.getElementById('custName').style.display = 'none';
+    document.getElementById('custPhone').style.display = 'none';
+    cart = [];
+    renderProductList();
+}
+
+function renderProductList(search = '') {
+    const products = loadData(CONFIG.STORAGE_KEYS.PRODUCTS).filter(p => {
+        if (isExpired(p.expiry)) return false; // Don't show expired products
+        if (search && !p.name.toLowerCase().includes(search.toLowerCase())) return false;
+        return true;
+    });
+    
+    const list = document.getElementById('productList');
+    list.innerHTML = '';
+    
+    if (products.length === 0) {
+        list.innerHTML = '<p class="text-muted">No products available.</p>';
+        return;
+    }
+    
+    const frag = document.createDocumentFragment();
+    products.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'card-modern';
+        div.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>${sanitizeInput(p.name)}</strong><br>
+                    <small class="text-muted">Price: ${formatMoney(p.price)} | Qty: ${p.qty}</small>
+                </div>
+                <button class="btn-accent btn-sm" onclick="addToCart('${p.id}')">Add</button>
+            </div>
+        `;
+        frag.appendChild(div);
+    });
+    list.appendChild(frag);
+}
+
+function filterProducts() {
+    const search = document.getElementById('searchProduct').value;
+    renderProductList(search);
+}
+
+function addToCart(productId) {
+    const products = loadData(CONFIG.STORAGE_KEYS.PRODUCTS);
+    const product = products.find(p => p.id === productId && !isExpired(p.expiry));
+    
+    if (!product || product.qty <= 0) {
+        Swal.fire({icon: 'warning', title: 'Product unavailable'});
+        return;
+    }
+    
+    const existing = cart.find(item => item.id === productId);
+    if (existing) {
+        if (existing.qty < product.qty) {
+            existing.qty++;
+        } else {
+            Swal.fire({icon: 'warning', title: 'Stock limit reached'});
+            return;
+        }
+    } else {
+        cart.push({...product, qty: 1});
+    }
+    
+    updateCartDisplay();
+}
+
+function removeFromCart(productId) {
+    cart = cart.filter(item => item.id !== productId);
+    updateCartDisplay();
+}
+
+function updateCartDisplay() {
+    const cartArea = document.getElementById('cartArea');
+    if (cart.length === 0) {
+        cartArea.innerHTML = '<p class="text-muted"><i class="bi bi-cart"></i> Cart is empty</p>';
+        return;
+    }
+    
+    const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    
+    cartArea.innerHTML = `
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Item</th><th>Qty</th><th>Price</th><th>Total</th><th></th>
+                </tr>
+            </thead>
+            <tbody>
+                ${cart.map(item => `
+                    <tr>
+                        <td>${sanitizeInput(item.name)}</td>
+                        <td>${item.qty}</td>
+                        <td>${formatMoney(item.price)}</td>
+                        <td>${formatMoney(item.price * item.qty)}</td>
+                        <td><button class="btn-danger btn-sm" onclick="removeFromCart('${item.id}')">×</button></td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+        <h5 class="text-end mt-3">Total: ${formatMoney(total)}</h5>
+    `;
+}
+
+function toggleCreditFields() {
+    const isCredit = document.getElementById('payType').value === 'Credit';
+    document.getElementById('custName').style.display = isCredit ? 'block' : 'none';
+    document.getElementById('custPhone').style.display = isCredit ? 'block' : 'none';
+}
+
+async function processSale() {
+    if (cart.length === 0) {
+        Swal.fire({icon: 'warning', title: 'Cart is empty'});
+        return;
+    }
+    
+    const paymentType = document.getElementById('payType').value;
+    const customerName = sanitizeInput(document.getElementById('custName').value, 100);
+    const customerPhone = sanitizeInput(document.getElementById('custPhone').value, 20);
+    
+    if (paymentType === 'Credit' && (!customerName || !customerPhone)) {
+        Swal.fire({icon: 'warning', title: 'Enter customer details'});
+        return;
+    }
+    
+    const products = loadData(CONFIG.STORAGE_KEYS.PRODUCTS);
+    const sales = loadData(CONFIG.STORAGE_KEYS.SALES);
+    const patients = loadData(CONFIG.STORAGE_KEYS.PATIENTS);
+    
+    // Check stock
+    for(let item of cart) {
+        const prod = products.find(p => p.id === item.id);
+        if (!prod || prod.qty < item.qty) {
+            Swal.fire({icon: 'error', title: 'Stock error', text: `Not enough stock: ${item.name}`});
+            return;
+        }
+    }
+    
+    // Update stock
+    cart.forEach(item => {
+        const prod = products.find(p => p.id === item.id);
+        prod.qty -= item.qty;
+    });
+    
+    // Create sale
+    const saleId = generateId('INV');
+    const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const sale = {
+        id: saleId,
+        date: new Date().toISOString(),
+        total: total,
+        payment: paymentType,
+        user: currentUser.username,
+        lines: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            qty: item.qty,
+            price: item.price,
+            cost: item.cost
+        })),
+        returned: false
+    };
+    
+    if (paymentType === 'Credit') {
+        sale.customer = customerName;
+        sale.phone = customerPhone;
+        
+        let patient = patients.find(p => p.phone === customerPhone);
+        if (!patient) {
+            patient = {
+                id: generateId('PAT'),
+                name: customerName,
+                phone: customerPhone,
+                balance: 0
+            };
+            patients.push(patient);
+        }
+        patient.balance += total;
+        saveData(CONFIG.STORAGE_KEYS.PATIENTS, patients);
+    }
+    
+    sales.push(sale);
+    
+    if (saveData(CONFIG.STORAGE_KEYS.PRODUCTS, products) && saveData(CONFIG.STORAGE_KEYS.SALES, sales)) {
+        printReceipt(sale);
+        Swal.fire({icon: 'success', title: 'Sale completed', text: `Receipt: ${saleId}`, timer: 2000});
+        cart = [];
+        renderPOS();
+    } else {
+        Swal.fire({icon: 'error', title: 'Sale failed'});
+    }
+}
+
+function printReceipt(sale) {
+    const printWindow = window.open('', '_blank');
+    const lines = sale.lines.map(l => `
+        <tr>
+            <td>${sanitizeInput(l.name)}</td>
+            <td>${l.qty}</td>
+            <td>${formatMoney(l.price)}</td>
+            <td>${formatMoney(l.qty * l.price)}</td>
+        </tr>
+    `).join('');
+
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Receipt ${sale.id}</title>
+            <style>
+                body { font-family: monospace; max-width: 300px; margin: 20px auto; }
+                .header { text-align: center; margin-bottom: 20px; border-bottom: 2px dashed #000; padding-bottom: 10px; }
+                table { width: 100%; border-collapse: collapse; }
+                @media print { button { display: none; } }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <img src="IMAGES/474461744_3830353873849045_6351787505269396883_n.jpg" style="width:100%; height:auto;">
+                <p>${new Date(sale.date).toLocaleString()}</p>
+            </div>
+            <p><strong>Receipt:</strong> ${sale.id}</p>
+            ${sale.customer ? `<p><strong>Customer:</strong> ${sanitizeInput(sale.customer)}</p>` : ''}
+            <p><strong>Cashier:</strong> ${sale.user}</p>
+            <table>
+                <tr style="border-bottom: 2px solid #000;">
+                    <th>Item</th><th>Qty</th><th>Price</th><th>Total</th>
+                </tr>
+                ${lines}
+                <tr style="border-top: 2px solid #000;">
+                    <td colspan="3"><strong>Total:</strong></td>
+                    <td><strong>${formatMoney(sale.total)}</strong></td>
+                </tr>
+            </table>
+            <p><strong>Payment:</strong> ${sale.payment}</p>
+            <p>Thank you for your business!</p>
+            <button onclick="window.print()">Print</button>
+        </body>
+        </html>
+    `);
+    
+    printWindow.document.close();
+    setTimeout(() => {
+        printWindow.print();
+        setTimeout(() => printWindow.close(), 500);
+    }, 250);
+}
+
+// ==================== PRODUCTS (ADMIN ONLY) ====================
+function renderProducts() {
+    // Only admin can see this
+    if (currentUser.role !== CONFIG.ROLES.ADMIN) {
+        showView('sell');
+        return;
+    }
+    
+    document.getElementById('editProductId').value = '';
+    document.getElementById('pName').value = '';
+    document.getElementById('pPrice').value = '';
+    document.getElementById('pCost').value = '';
+    document.getElementById('pQty').value = '';
+    document.getElementById('pLow').value = '5';
+    document.getElementById('pExpiry').value = '';
+    document.getElementById('filterProd').value = '';
+    renderProductsTable();
+}
+
+function renderProductsTable(filter = '') {
+    const products = loadData(CONFIG.STORAGE_KEYS.PRODUCTS);
+    const filtered = filter ? products.filter(p => p.name.toLowerCase().includes(filter.toLowerCase())) : products;
+    
+    const tbody = document.getElementById('productsTable');
+    tbody.innerHTML = '';
+    
+    const frag = document.createDocumentFragment();
+    filtered.forEach(p => {
+        const tr = document.createElement('tr');
+        const expired = isExpired(p.expiry);
+        const expiring = isExpiringSoon(p.expiry);
+        tr.className = expired ? 'expired' : (expiring ? 'expiring-soon' : '');
+        
+        tr.innerHTML = `
+            <td>${sanitizeInput(p.name)} ${expired ? '❌' : (expiring ? '⚠️' : '')}</td>
+            <td>${formatMoney(p.price)}</td>
+            <td>${formatMoney(p.cost)}</td>
+            <td>${p.qty}</td>
+            <td>${p.low}</td>
+            <td>${new Date(p.expiry).toLocaleDateString()}</td>
+            <td>
+                <span class="badge ${expired ? 'bg-danger' : (expiring ? 'bg-warning' : 'bg-success')}">
+                    ${expired ? 'Expired' : (expiring ? 'Expiring' : 'Good')}
+                </span>
+            </td>
+            <td>
+                <button class="btn-accent btn-sm" onclick="editProduct('${p.id}')">Edit</button>
+                <button class="btn-danger btn-sm" onclick="deleteProduct('${p.id}')">Delete</button>
+            </td>
+        `;
+        frag.appendChild(tr);
+    });
+    tbody.appendChild(frag);
+}
+
+function handleProductSubmit(e) {
+    // Only admin can submit
+    if (currentUser.role !== CONFIG.ROLES.ADMIN) {
+        Swal.fire({icon: 'error', title: 'Access denied'});
+        return;
+    }
+    
+    e.preventDefault();
+    
+    const id = document.getElementById('editProductId').value;
+    const product = {
+        name: sanitizeInput(document.getElementById('pName').value, 100),
+        price: parseFloat(document.getElementById('pPrice').value),
+        cost: parseFloat(document.getElementById('pCost').value),
+        qty: parseInt(document.getElementById('pQty').value),
+        low: parseInt(document.getElementById('pLow').value),
+        expiry: document.getElementById('pExpiry').value
+    };
+    
+    if (!product.name || !product.price || !product.cost || product.qty < 0) {
+        Swal.fire({icon: 'warning', title: 'Please fill all fields correctly'});
+        return;
+    }
+    
+    const products = loadData(CONFIG.STORAGE_KEYS.PRODUCTS);
+    
+    if (id) {
+        const index = products.findIndex(p => p.id === id);
+        if (index !== -1) products[index] = {...products[index], ...product};
+    } else {
+        products.push({...product, id: generateId('PROD')});
+    }
+    
+    if (saveData(CONFIG.STORAGE_KEYS.PRODUCTS, products)) {
+        Swal.fire({icon: 'success', title: 'Product saved', timer: 1500});
+        renderProducts();
+    }
+}
+
+function editProduct(id) {
+    // Only admin can edit
+    if (currentUser.role !== CONFIG.ROLES.ADMIN) return;
+    
+    const products = loadData(CONFIG.STORAGE_KEYS.PRODUCTS);
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+    
+    document.getElementById('editProductId').value = product.id;
+    document.getElementById('pName').value = product.name;
+    document.getElementById('pPrice').value = product.price;
+    document.getElementById('pCost').value = product.cost;
+    document.getElementById('pQty').value = product.qty;
+    document.getElementById('pLow').value = product.low;
+    document.getElementById('pExpiry').value = product.expiry;
+}
+
+function deleteProduct(id) {
+    // Only admin can delete
+    if (currentUser.role !== CONFIG.ROLES.ADMIN) return;
+    
+    Swal.fire({
+        title: 'Delete product?',
+        icon: 'warning',
+        showCancelButton: true
+    }).then(result => {
+        if (result.isConfirmed) {
+            const products = loadData(CONFIG.STORAGE_KEYS.PRODUCTS).filter(p => p.id !== id);
+            if (saveData(CONFIG.STORAGE_KEYS.PRODUCTS, products)) {
+                Swal.fire({icon: 'success', title: 'Product deleted', timer: 1500});
+                renderProducts();
+            }
+        }
+    });
+}
+
+// ==================== REPORTS ====================
+function handleReportRangeChange() {
+    const val = document.getElementById('reportRange').value;
+    document.getElementById('rFrom').style.display = val === 'custom' ? 'inline-block' : 'none';
+    document.getElementById('rTo').style.display = val === 'custom' ? 'inline-block' : 'none';
+    renderReports();
+}
+
+function renderReports() {
+    const range = document.getElementById('reportRange').value;
+    let from = null, to = null;
+    
+    if (range === 'today') {
+        from = new Date(); from.setHours(0,0,0,0);
+        to = new Date(); to.setHours(23,59,59,999);
+    } else if (range === 'week') {
+        from = new Date(); from.setDate(from.getDate() - 7);
+        to = new Date();
+    } else if (range === 'month') {
+        from = new Date(); from.setDate(1);
+        to = new Date();
+    } else if (range === 'custom') {
+        const f = document.getElementById('rFrom').value;
+        const t = document.getElementById('rTo').value;
+        if (f) { from = new Date(f); from.setHours(0,0,0,0); }
+        if (t) { to = new Date(t); to.setHours(23,59,59,999); }
+    }
+    
+    const sales = loadData(CONFIG.STORAGE_KEYS.SALES).filter(s => {
+        if (s.returned) return false;
+        // Cashiers only see their own sales
+        if (currentUser.role === CONFIG.ROLES.CASHIER && s.user !== currentUser.username) return false;
+        const d = new Date(s.date);
+        if (from && d < from) return false;
+        if (to && d > to) return false;
+        return true;
+    });
+    
+    document.getElementById('repTotal').textContent = formatMoney(sales.reduce((a,b) => a + b.total, 0));
+    
+    const items = {};
+    sales.forEach(s => s.lines.forEach(l => items[l.name] = (items[l.name] || 0) + l.qty));
+    
+    const repItems = document.getElementById('repItems');
+    repItems.innerHTML = '';
+    
+    if (Object.keys(items).length === 0) {
+        repItems.innerHTML = '<p class="text-muted">No items sold.</p>';
+    } else {
+        const ul = document.createElement('ul');
+        ul.className = 'list-group';
+        Object.entries(items).sort((a,b) => b[1] - a[1]).forEach(([n,q]) => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item d-flex justify-content-between';
+            li.innerHTML = `${sanitizeInput(n)}<span class="badge bg-primary rounded-pill">${q}</span>`;
+            ul.appendChild(li);
+        });
+        repItems.appendChild(ul);
+    }
+    
+    // Recent sales - filtered for cashier
+    const recent = loadData(CONFIG.STORAGE_KEYS.SALES).slice().reverse()
+        .filter(s => currentUser.role === CONFIG.ROLES.ADMIN || s.user === currentUser.username)
+        .slice(0, 50);
+    
+    const tbl = document.getElementById('recentSalesTbl');
+    tbl.innerHTML = '';
+    
+    const frag = document.createDocumentFragment();
+    recent.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.className = s.returned ? 'table-warning' : '';
+        tr.innerHTML = `<td>${s.id}</td><td>${new Date(s.date).toLocaleString()}</td><td>${formatMoney(s.total)}</td><td>${s.payment}</td><td>${s.user}</td>`;
+        frag.appendChild(tr);
+    });
+    tbl.appendChild(frag);
+    
+    const creditList = document.getElementById('creditList');
+    const patients = loadData(CONFIG.STORAGE_KEYS.PATIENTS).filter(p => p.balance > 0);
+    creditList.innerHTML = '';
+    
+    if (patients.length === 0) {
+        creditList.innerHTML = '<p class="text-muted">No active credit accounts.</p>';
+    } else {
+        patients.forEach(p => {
+            const div = document.createElement('div');
+            div.className = 'card-modern mb-2';
+            div.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${sanitizeInput(p.name)}</strong><br>
+                        <small class="text-muted">${sanitizeInput(p.phone)}</small>
+                    </div>
+                    <h5 class="text-warning">${formatMoney(p.balance)}</h5>
+                </div>
+            `;
+            creditList.appendChild(div);
+        });
+    }
+}
+
+// ==================== RETURNS (ADMIN ONLY) ====================
+function processReturn() {
+    // Only admin can process returns
+    if (currentUser.role !== CONFIG.ROLES.ADMIN) {
+        Swal.fire({icon: 'error', title: 'Access denied', text: 'Admin only.'});
+        return;
+    }
+    
+    const orderId = sanitizeInput(document.getElementById('returnOrderId').value, 50);
+    if (!orderId) {
+        Swal.fire({icon: 'warning', title: 'Enter Order ID'});
+        return;
+    }
+    
+    const sales = loadData(CONFIG.STORAGE_KEYS.SALES);
+    const saleIndex = sales.findIndex(s => s.id === orderId);
+    
+    if (saleIndex === -1) {
+        Swal.fire({icon: 'error', title: 'Order not found'});
+        return;
+    }
+    
+    const sale = sales[saleIndex];
+    if (sale.returned) {
+        Swal.fire({icon: 'info', title: 'Already returned'});
+        return;
+    }
+    
+    if ((Date.now() - new Date(sale.date).getTime()) / 36e5 > 24) {
+        Swal.fire({icon: 'error', title: 'Return expired', text: 'Returns only allowed within 24 hours.'});
+        return;
+    }
+    
+    Swal.fire({
+        title: 'Process return?',
+        text: `Return ${sale.lines.length} item(s) from order ${orderId}?`,
+        icon: 'question',
+        showCancelButton: true
+    }).then(result => {
+        if (result.isConfirmed) {
+            const products = loadData(CONFIG.STORAGE_KEYS.PRODUCTS);
+            sale.lines.forEach(line => {
+                const prod = products.find(p => p.id === line.id);
+                if (prod) prod.qty += line.qty;
+            });
+            
+            sales[saleIndex].returned = true;
+            const returns = loadData(CONFIG.STORAGE_KEYS.RETURNS);
+            returns.push({id: generateId('r'), orderId: sale.id, date: new Date().toISOString()});
+            
+            if (saveData(CONFIG.STORAGE_KEYS.PRODUCTS, products) &&
+                saveData(CONFIG.STORAGE_KEYS.SALES, sales) &&
+                saveData(CONFIG.STORAGE_KEYS.RETURNS, returns)) {
+                
+                Swal.fire({icon: 'success', title: 'Return processed', timer: 2000});
+                document.getElementById('returnOrderId').value = '';
+                document.getElementById('returnResult').innerHTML = `<div class="alert alert-success">Return processed for ${orderId}</div>`;
+                renderReturnsHistory();
+                updateAll();
+            }
+        }
+    });
+}
+
+function renderReturnsHistory() {
+    // Only admin can see returns
+    if (currentUser.role !== CONFIG.ROLES.ADMIN) return;
+    
+    const returns = loadData(CONFIG.STORAGE_KEYS.RETURNS);
+    const list = document.getElementById('returnsList');
+    list.innerHTML = '';
+    
+    if (returns.length === 0) {
+        list.innerHTML = '<p class="text-muted">No returns recorded yet.</p>';
+        return;
+    }
+    
+    returns.slice().reverse().forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'card-modern mb-2';
+        div.innerHTML = `
+            <div class="d-flex justify-content-between">
+                <div><b>${r.orderId}</b><br><small>${new Date(r.date).toLocaleString()}</small></div>
+                <span class="text-success">✓ Returned</span>
+            </div>
+        `;
+        list.appendChild(div);
+    });
+}
+
+// ==================== USERS (ADMIN ONLY) ====================
+async function handleUserSubmit(e) {
+    // Only admin can add users
+    if (currentUser.role !== CONFIG.ROLES.ADMIN) {
+        Swal.fire({icon: 'error', title: 'Access denied'});
+        return;
+    }
+    
+    e.preventDefault();
+    
+    const username = sanitizeInput(document.getElementById('uName').value, 50);
+    const password = document.getElementById('uPass').value;
+    const role = document.getElementById('uRole').value;
+    
+    if (!username || password.length < 4) {
+        Swal.fire({icon: 'warning', title: 'Invalid input'});
+        return;
+    }
+    
+    const users = loadData(CONFIG.STORAGE_KEYS.USERS);
+    if (users.find(u => u.username === username)) {
+        Swal.fire({icon: 'warning', title: 'User already exists'});
+        return;
+    }
+    
+    users.push({
+        username,
+        password: await hashPassword(password),
+        role,
+        created: new Date().toISOString()
+    });
+    
+    if (saveData(CONFIG.STORAGE_KEYS.USERS, users)) {
+        Swal.fire({icon: 'success', title: 'User added', timer: 1500});
+        document.getElementById('userForm').reset();
+        renderUsers();
+    }
+}
+
+function renderUsers() {
+    // Only admin can see users
+    if (currentUser.role !== CONFIG.ROLES.ADMIN) return;
+    
+    const tbody = document.getElementById('usersTable');
+    tbody.innerHTML = '';
+    
+    const users = loadData(CONFIG.STORAGE_KEYS.USERS);
+    users.forEach(u => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${sanitizeInput(u.username)}</td>
+            <td><span class="badge ${u.role === CONFIG.ROLES.ADMIN ? 'bg-danger' : 'bg-primary'}">${u.role}</span></td>
+            <td>
+                ${u.username !== 'admin' ? 
+                    `<button class="btn-danger btn-sm" onclick="deleteUser('${u.username}')">Delete</button>` : 
+                    `<small>Protected</small>`
+                }
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function deleteUser(username) {
+    // Only admin can delete users
+    if (currentUser.role !== CONFIG.ROLES.ADMIN) return;
+    
+    Swal.fire({
+        title: 'Delete user?',
+        icon: 'warning',
+        showCancelButton: true
+    }).then(result => {
+        if (result.isConfirmed) {
+            const users = loadData(CONFIG.STORAGE_KEYS.USERS).filter(u => u.username !== username);
+            if (saveData(CONFIG.STORAGE_KEYS.USERS, users)) {
+                Swal.fire({icon: 'success', title: 'User deleted', timer: 1500});
+                renderUsers();
+            }
+        }
+    });
+}
+
+// ==================== CREDIT ====================
+function renderCreditView() {
+    document.getElementById('searchCustomer').value = '';
+    document.getElementById('paymentAmount').value = '';
+    document.getElementById('paymentNote').value = '';
+    document.getElementById('paymentResult').innerHTML = '';
+    renderCreditAccounts();
+}
+
+function renderCreditAccounts() {
+    const patients = loadData(CONFIG.STORAGE_KEYS.PATIENTS).filter(p => p.balance > 0);
+    const list = document.getElementById('creditAccountsList');
+    list.innerHTML = '';
+    
+    if (patients.length === 0) {
+        list.innerHTML = '<p class="text-muted">No credit customers.</p>';
+        return;
+    }
+    
+    const frag = document.createDocumentFragment();
+    patients.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'card-modern mb-2';
+        div.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>${sanitizeInput(p.name)}</strong><br>
+                    <small class="text-muted">${sanitizeInput(p.phone)}</small>
+                </div>
+                <h5 class="text-warning">${formatMoney(p.balance)}</h5>
+            </div>
+        `;
+        frag.appendChild(div);
+    });
+    list.appendChild(frag);
+}
+
+function handleCreditPayment(e) {
+    e.preventDefault();
+    
+    const search = sanitizeInput(document.getElementById('searchCustomer').value, 100);
+    const amount = parseFloat(document.getElementById('paymentAmount').value) || 0;
+    const note = sanitizeInput(document.getElementById('paymentNote').value, 200);
+    
+    if (!search || amount <= 0) {
+        Swal.fire({icon: 'warning', title: 'Invalid input'});
+        return;
+    }
+    
+    let patients = loadData(CONFIG.STORAGE_KEYS.PATIENTS);
+    const patient = patients.find(p => 
+        p.name.toLowerCase().includes(search.toLowerCase()) || p.phone.includes(search)
+    );
+    
+    if (!patient) {
+        Swal.fire({icon: 'error', title: 'Customer not found'});
+        return;
+    }
+    
+    if (amount > patient.balance) {
+        Swal.fire({icon: 'error', title: 'Invalid amount', text: `Customer owes ${formatMoney(patient.balance)}`});
+        return;
+    }
+    
+    patient.balance = Math.max(0, patient.balance - amount);
+    
+    const payments = loadData(CONFIG.STORAGE_KEYS.PAYMENTS);
+    payments.push({
+        id: generateId('PAY'),
+        customerId: patient.id,
+        amount,
+        note,
+        date: new Date().toISOString(),
+        user: currentUser.username
+    });
+    
+    if (saveData(CONFIG.STORAGE_KEYS.PATIENTS, patients) &&
+        saveData(CONFIG.STORAGE_KEYS.PAYMENTS, payments)) {
+        
+        Swal.fire({icon: 'success', title: 'Payment recorded', timer: 2000});
+        document.getElementById('creditPaymentForm').reset();
+        renderCreditAccounts();
+        renderReports();
+        document.getElementById('paymentResult').innerHTML = `<div class="alert alert-success">Payment recorded!</div>`;
+    } else {
+        Swal.fire({icon: 'error', title: 'Save failed'});
+    }
+}
+
+// ==================== UPDATE ALL ====================
+function updateAll() {
+    if (currentUser.role === CONFIG.ROLES.ADMIN) {
+        renderDashboard();
+    }
+}
+
+// ==================== INITIALIZATION ====================
+async function initDefaultData() {
+    const users = loadData(CONFIG.STORAGE_KEYS.USERS);
+    if (users.length === 0) {
+        saveData(CONFIG.STORAGE_KEYS.USERS, [{
+            username: 'admin',
+            password: await hashPassword('admin123'),
+            role: CONFIG.ROLES.ADMIN
+        }]);
+    }
+    
+    const products = loadData(CONFIG.STORAGE_KEYS.PRODUCTS);
+    if (products.length === 0) {
+        const nextYear = new Date();
+        nextYear.setFullYear(nextYear.getFullYear() + 1);
+        
+        saveData(CONFIG.STORAGE_KEYS.PRODUCTS, [
+            {
+                id: generateId('PROD'),
+                name: 'Amoxicillin 500mg',
+                price: 15.99,
+                cost: 8.50,
+                qty: 100,
+                low: 10,
+                expiry: nextYear.toISOString().split('T')[0]
+            },
+            {
+                id: generateId('PROD'),
+                name: 'Paracetamol 500mg',
+                price: 5.99,
+                cost: 2.50,
+                qty: 200,
+                low: 20,
+                expiry: new Date(nextYear.getTime() + 6 * 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+            }
+        ]);
+    }
+}
+
+// ==================== EVENT LISTENERS ====================
+document.addEventListener('DOMContentLoaded', async () => {
+    // Login events
+    document.getElementById('loginBtn').addEventListener('click', handleLogin);
+    document.getElementById('loginUsername').addEventListener('keypress', e => {
+        if (e.key === 'Enter') document.getElementById('loginPassword').focus();
+    });
+    document.getElementById('loginPassword').addEventListener('keypress', e => {
+        if (e.key === 'Enter') handleLogin();
+    });
+    
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        Swal.fire({
+            title: 'Logout?',
+            icon: 'question',
+            showCancelButton: true
+        }).then(result => {
+            if (result.isConfirmed) {
+                localStorage.removeItem(CONFIG.STORAGE_KEYS.SESSION);
+                currentUser = null;
+                cart = [];
+                showLogin();
+            }
+        });
+    });
+    
+    // Export (Admin only)
+    document.getElementById('exportBtn')?.addEventListener('click', () => {
+        const data = {
+            users: loadData(CONFIG.STORAGE_KEYS.USERS),
+            sales: loadData(CONFIG.STORAGE_KEYS.SALES),
+            products: loadData(CONFIG.STORAGE_KEYS.PRODUCTS),
+            patients: loadData(CONFIG.STORAGE_KEYS.PATIENTS),
+            returns: loadData(CONFIG.STORAGE_KEYS.RETURNS),
+            payments: loadData(CONFIG.STORAGE_KEYS.PAYMENTS)
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `pharmacy_backup_${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+    
+    // POS events
+    document.getElementById('payType').addEventListener('change', toggleCreditFields);
+    document.getElementById('btnSaveSale').addEventListener('click', processSale);
+    document.getElementById('searchProduct').addEventListener('input', debounce(filterProducts, 300));
+    
+    // Products events (will be hidden for cashier)
+    document.getElementById('productForm')?.addEventListener('submit', handleProductSubmit);
+    document.getElementById('filterProd')?.addEventListener('input', debounce(() => {
+        const search = document.getElementById('filterProd').value;
+        renderProductsTable(search);
+    }, 300));
+    
+    // Reports events
+    document.getElementById('reportRange').addEventListener('change', handleReportRangeChange);
+    document.getElementById('rFrom').addEventListener('change', renderReports);
+    document.getElementById('rTo').addEventListener('change', renderReports);
+    
+    // Returns event (hidden for cashier)
+    document.getElementById('processReturnBtn')?.addEventListener('click', processReturn);
+    
+    // Users event (hidden for cashier)
+    document.getElementById('userForm')?.addEventListener('submit', handleUserSubmit);
+    
+    // Credit event
+    document.getElementById('creditPaymentForm').addEventListener('submit', handleCreditPayment);
+    
+    // Initialize
+    await initDefaultData();
+    await checkSession();
+});
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Global function references for onclick handlers
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+window.editProduct = editProduct;
+window.deleteProduct = deleteProduct;
+window.deleteUser = deleteUser;
+</script>
+
+</body>
+</html>
